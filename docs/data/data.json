@@ -119,7 +119,23 @@
       "pic": "PK JAFAR & SELVI",
       "summary": "Keputusan yang baik tidak selalu membutuhkan informasi yang lengkap. Yang dibutuhkan adalah informasi yang cukup untuk menentukan langkah yang tepat.",
       "result": "",
-      "files": []
+      "files": [
+        {
+          "name": "bukti-20261013-110245-1.png",
+          "url": "bukti/bukti-20261013-110245-1.png",
+          "type": "image/png"
+        },
+        {
+          "name": "bukti-20261013-110304-2.png",
+          "url": "bukti/bukti-20261013-110304-2.png",
+          "type": "image/png"
+        },
+        {
+          "name": "bukti-20261013-110319-3.png",
+          "url": "bukti/bukti-20261013-110319-3.png",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
