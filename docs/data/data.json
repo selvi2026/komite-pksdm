@@ -97,26 +97,6 @@
       ]
     },
     {
-      "id": "pmv64nuye9x3",
-      "name": "Penyusunan Dokumen Handbook Activity",
-      "groupId": "g-handbook",
-      "month": 3,
-      "year": 2026,
-      "status": "done",
-      "jenis": "Tindak lanjut",
-      "stats": [],
-      "pic": "Pk Jafar & Selvi",
-      "summary": "Penyusunan Dokumen",
-      "result": "",
-      "files": [
-        {
-          "name": "Buka tautan (sites.google.com)",
-          "url": "https://sites.google.com/view/sid-handbook/home",
-          "type": "link"
-        }
-      ]
-    },
-    {
       "id": "pmv650zsaiv3",
       "name": "Fishbone & 5 Whys - Tindak Lanjut Pelatihan Clarity Coach",
       "groupId": "g-pelatihan",
