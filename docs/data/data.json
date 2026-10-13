@@ -41,13 +41,13 @@
     },
     {
       "id": "p-innovaction",
-      "name": "Pelatihan Innovaction Fungsional",
+      "name": "Pelatihan Innovaction Fungsional - UISI",
       "groupId": "g-pelatihan",
       "month": 2,
       "year": 2026,
       "status": "done",
       "jenis": "Pelatihan",
-      "pic": "",
+      "pic": "All TIM",
       "summary": "Pelatihan inovasi dan kreativitas dengan teknik SCAMPER untuk pegawai fungsional kantor pusat (7 Februari 2026). Peserta mengisi absensi, refleksi pilihan kata kerja SCAMPER, dan kuesioner pemahaman inovasi.",
       "result": "Peserta memiliki pemahaman inovasi yang baik dan siap melakukan perbaikan nyata yang berkelanjutan. Yang perlu diperkuat: keberanian mencoba, ruang aman untuk salah, dan level ambisi inovasi.",
       "stats": [
