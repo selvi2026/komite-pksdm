@@ -29,6 +29,7 @@
   --plan:#8fa3b3; --plan-soft:#25384a;
   --late:#e57b7b; --late-soft:#40201f; color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 64px}
 .wrap{max-width:1080px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
 h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.15}
@@ -144,11 +145,6 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
   <div id="saveBar" class="banner" hidden>
     <span><b>Mode edit.</b> Perubahan langsung tersimpan ke GitHub dan tampil di link dalam sekitar 1 menit. <b id="saveMsg" class="mono"></b></span>
     <button class="btn small" id="logout" type="button">Keluar mode edit</button>
-  </div>
-
-  <div id="sampleBanner" class="banner" hidden>
-    <span>Data yang tampil saat ini adalah <b>contoh</b>. Ganti dengan program PKSDM yang sebenarnya.</span>
-    <button class="btn small danger" id="clearSample" type="button" hidden>Hapus semua data contoh</button>
   </div>
 
   <section id="summary" class="summary" aria-label="Ringkasan"></section>
@@ -280,9 +276,6 @@ function render(){
   var inYear=progs.filter(function(p){return p.year===state.year});
   $("adminBtns").hidden=!canEdit;
   $("saveBar").hidden=!canEdit;
-  var hasSample=progs.some(function(p){return p.sample})||groups.some(function(g){return g.sample});
-  $("sampleBanner").hidden=!hasSample;
-  $("clearSample").hidden=!(hasSample&&canEdit);
   renderSummary(inYear);renderGroups(inYear);renderMap(inYear);renderList(inYear);
 }
 function count(arr){var c={done:0,run:0,plan:0,late:0};arr.forEach(function(p){c[p.status in c?p.status:"plan"]++});return c}
@@ -434,10 +427,6 @@ armed($("gfDelete"),"Hapus kelompok",function(){
   if(progs.some(function(p){return p.groupId===editGroup})){$("gfDelete").textContent="Masih ada program di kelompok ini";return}
   groups=groups.filter(function(g){return g.id!==editGroup});$("grpModal").hidden=true;persist();
 });
-armed($("clearSample"),"Hapus semua data contoh",function(){
-  progs=progs.filter(function(p){return!p.sample});groups=groups.filter(function(g){return!g.sample});persist();
-});
-
 $("logout").onclick=function(){lsSet(TKEY,null);location.hash="";location.reload()};
 document.addEventListener("keydown",function(e){if(e.key==="Escape"){$("progModal").hidden=true;$("grpModal").hidden=true;$("loginModal").hidden=true}});
 
