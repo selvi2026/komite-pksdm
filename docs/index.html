@@ -106,6 +106,8 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
 .stat b{font-family:var(--f-display);font-size:1.15rem;font-weight:700;line-height:1.2}
 .stat span{font-size:.75rem;color:var(--muted)}
 .pill.jenis{background:var(--brand-soft);color:var(--brand)}
+.dropzone{border:1.5px dashed var(--line);border-radius:6px;padding:14px;text-align:center;font-size:.88rem;color:var(--muted);margin-top:8px}
+.dropzone:focus,.dropzone.over{border-color:var(--brand);color:var(--ink);background:var(--brand-soft)}
 .empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:8px}
 .admin{display:flex;gap:8px;margin-top:6px}
 .overlay{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:start center;overflow:auto;padding:24px 16px;z-index:10}
@@ -200,6 +202,7 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
     <div>
       <div class="eyebrow" style="margin-bottom:6px">Bukti dan dokumen pendukung</div>
       <div class="fl" id="pfFiles"></div>
+      <div id="pfDrop" class="dropzone" tabindex="0">Tempel gambar di sini dengan <b>Ctrl+V</b> (mis. hasil screenshot), atau seret file ke kotak ini</div>
       <input type="file" id="pfUpload" multiple style="margin-top:8px">
       <div class="toolbar" style="margin-top:8px"><input type="text" id="pfLink" placeholder="Atau tempel tautan (https://...)" style="flex:1;min-width:0"><button class="btn small" type="button" id="pfLinkAdd">Tambah tautan</button></div>
       <div class="eyebrow" id="pfUpMsg" style="margin-top:4px">Pilih file bukti. File langsung diunggah ke GitHub (maks. 20 MB per file).</div>
@@ -377,8 +380,7 @@ function renderEditFiles(){
 }
 $("pfFiles").onclick=function(e){var b=e.target.closest("[data-rm]");if(!b)return;editFiles.splice(+b.dataset.rm,1);renderEditFiles()};
 function readB64(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1])};r.onerror=rej;r.readAsDataURL(f)})}
-$("pfUpload").onchange=async function(){
-  var list=Array.prototype.slice.call(this.files);this.value="";
+async function uploadList(list){
   for(var i=0;i<list.length;i++){
     var f=list[i],safe=f.name.replace(/[^A-Za-z0-9._-]+/g,"-");
     if(f.size>20*1024*1024){$("pfUpMsg").textContent=f.name+" lebih dari 20 MB, tidak diunggah.";continue}
@@ -391,7 +393,22 @@ $("pfUpload").onchange=async function(){
     }catch(e){$("pfUpMsg").textContent="Gagal mengunggah "+f.name+": "+e.message;return}
   }
   $("pfUpMsg").textContent="Selesai diunggah. Klik Simpan untuk menautkan ke program.";
-};
+}
+$("pfUpload").onchange=function(){var l=Array.prototype.slice.call(this.files);this.value="";uploadList(l)};
+function stamp(){var d=new Date(),z=function(n){return String(n).padStart(2,"0")};return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+"-"+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds())}
+var pasteN=0;
+function imgFile(b){var ext=(b.type.split("/")[1]||"png").replace("jpeg","jpg").replace(/[^a-z0-9]/g,"");return new File([b],"bukti-"+stamp()+"-"+(++pasteN)+"."+ext,{type:b.type})}
+document.addEventListener("paste",function(e){
+  if($("progModal").hidden)return;
+  var items=(e.clipboardData&&e.clipboardData.items)||[],imgs=[];
+  for(var i=0;i<items.length;i++){if(items[i].kind==="file"&&/^image\//.test(items[i].type)){var b=items[i].getAsFile();if(b)imgs.push(imgFile(b))}}
+  if(!imgs.length)return;
+  e.preventDefault();uploadList(imgs);
+});
+var dz=$("pfDrop");
+dz.addEventListener("dragover",function(e){e.preventDefault();dz.classList.add("over")});
+dz.addEventListener("dragleave",function(){dz.classList.remove("over")});
+dz.addEventListener("drop",function(e){e.preventDefault();dz.classList.remove("over");var l=Array.prototype.slice.call(e.dataTransfer.files||[]);if(l.length)uploadList(l)});
 $("pfLinkAdd").onclick=function(){
   var u=$("pfLink").value.trim();if(!/^https?:\/\//i.test(u)){$("pfUpMsg").textContent="Tautan harus diawali https://";return}
   var host=u.replace(/^https?:\/\//i,"").split("/")[0];
