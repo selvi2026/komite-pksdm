@@ -130,7 +130,13 @@
       "pic": "Pk Jafar & Selvi",
       "summary": "Penyusunan Dokumen",
       "result": "",
-      "files": []
+      "files": [
+        {
+          "name": "Buka tautan (sites.google.com)",
+          "url": "https://sites.google.com/view/sid-handbook/home",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
