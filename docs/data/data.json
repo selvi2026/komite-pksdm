@@ -261,6 +261,26 @@
           "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
         }
       ]
+    },
+    {
+      "id": "pmv6ggde5c72",
+      "name": "Draft IK ROLING MAGANG",
+      "groupId": "gmv6ewu87kk8",
+      "month": 10,
+      "year": 2026,
+      "status": "plan",
+      "jenis": "Tindak lanjut",
+      "stats": [],
+      "pic": "Pk Rohim, Pk Ganang & Selvi",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "13.10.2026 IK ROLING MAGANG SID.docx",
+          "url": "bukti/13.10.2026-IK-ROLING-MAGANG-SID.docx",
+          "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      ]
     }
   ]
 }
