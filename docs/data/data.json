@@ -117,6 +117,20 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "id": "pmv64nuye9x3",
+      "name": "Penyusunan Dokumen Handbook Activity",
+      "groupId": "g-pelatihan",
+      "month": 3,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Lainnya",
+      "stats": [],
+      "pic": "Pk Jafar & Selvi",
+      "summary": "Penyusunan Dokumen",
+      "result": "",
+      "files": []
     }
   ]
 }
