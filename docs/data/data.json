@@ -211,6 +211,26 @@
           "type": "image/png"
         }
       ]
+    },
+    {
+      "id": "pmv6ecwt1hde",
+      "name": "ULTAH OKTOBER",
+      "groupId": "g-pelatihan",
+      "month": 10,
+      "year": 2026,
+      "status": "plan",
+      "jenis": "Pelatihan",
+      "stats": [],
+      "pic": "Pk Rohim",
+      "summary": "",
+      "result": "APRESIASI UANG",
+      "files": [
+        {
+          "name": "ULTAH_sid_2026(tetap).xlsx",
+          "url": "bukti/ULTAH_sid_2026-tetap-.xlsx",
+          "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
+      ]
     }
   ]
 }
