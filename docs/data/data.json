@@ -137,6 +137,26 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "id": "pmv650zsaiv3",
+      "name": "Fishbone & 5 Whys - Tindak Lanjut Pelatihan Clarity Coach",
+      "groupId": "g-pelatihan",
+      "month": 10,
+      "year": 2026,
+      "status": "plan",
+      "jenis": "Pelatihan",
+      "stats": [],
+      "pic": "Pk Rohim & Pk Ganang",
+      "summary": "Jabar & DKI",
+      "result": "Seluruh informasi permasalahan cabang yang dianalisis menggunakan fishbone, 5 why",
+      "files": [
+        {
+          "name": "Buka tautan (sid-branch-troubleshooting-diagnosis.vercel.app)",
+          "url": "https://sid-branch-troubleshooting-diagnosis.vercel.app/",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
