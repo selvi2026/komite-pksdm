@@ -236,6 +236,31 @@
           "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         }
       ]
+    },
+    {
+      "id": "pmv6eyic29o9",
+      "name": "EVALUASI JUNI-SEPTEMBER",
+      "groupId": "gmv6ewu87kk8",
+      "month": 10,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Evaluasi",
+      "stats": [],
+      "pic": "Pk Rohim, Selvi",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "Evaluasi Magang Jun-Sep 2026.xlsx",
+          "url": "bukti/Evaluasi-Magang-Jun-Sep-2026.xlsx",
+          "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        {
+          "name": "Evaluasi Magang Jun-Sep 2026.pptx",
+          "url": "bukti/Evaluasi-Magang-Jun-Sep-2026.pptx",
+          "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
     }
   ]
 }
