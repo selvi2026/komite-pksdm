@@ -18,33 +18,6 @@
   ],
   "programs": [
     {
-      "id": "p-tna",
-      "name": "Kuesioner Training Needs Analysis (TNA) 2026",
-      "groupId": "g-pelatihan",
-      "month": 1,
-      "year": 2026,
-      "status": "done",
-      "jenis": "Asesmen",
-      "pic": "Mb Friska & Selvi",
-      "summary": "Survei kebutuhan pelatihan untuk Branch Manager, Sales, dan Branch Administration Officer di seluruh cabang (Jawa Timur, Jawa Tengah, Jawa Barat, dan luar pulau). Responden juga menilai kompetensi diri (self assessment), memilih tiga pelatihan prioritas, dan memilih metode pelatihan yang diinginkan.",
-      "result": "Hasil survei menjadi dasar penyusunan program pelatihan 2026. Pelatihan prioritas pertama yang paling banyak dipilih adalah Analytical Decision Making for Branch Control (70 pilihan), disusul Effective Communication & Customer Handling (46) dan Practical Leadership & Performance Coaching (44).",
-      "stats": [
-        {
-          "label": "Responden",
-          "value": "392"
-        },
-        {
-          "label": "Jumlah pegawai",
-          "value": "635"
-        },
-        {
-          "label": "Periode survei",
-          "value": "27–31 Jan 2026"
-        }
-      ],
-      "files": []
-    },
-    {
       "id": "p-handbook",
       "name": "Handbook Activity SID",
       "groupId": "g-handbook",
