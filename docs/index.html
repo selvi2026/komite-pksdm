@@ -132,7 +132,6 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
     <div>
       <div class="eyebrow">Tim Komite PKSDM</div>
       <h1>Portofolio Komite PKSDM</h1>
-      <p>Program per kelompok, realisasi tiap bulan, beserta bukti dan dokumen pendukungnya.</p>
     </div>
     <div class="toolbar">
       <label class="eyebrow" for="yearSel">Tahun</label>
@@ -140,14 +139,11 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
       <span id="adminBtns" class="toolbar" hidden>
         <button class="btn" id="addGroup" type="button">+ Kelompok</button>
         <button class="btn primary" id="addProg" type="button">+ Program</button>
+        <button class="btn" id="logout" type="button">Keluar mode edit</button>
+        <span id="saveMsg" class="mono" style="font-size:.8rem;color:var(--muted)"></span>
       </span>
     </div>
   </header>
-
-  <div id="saveBar" class="banner" hidden>
-    <span><b>Mode edit.</b> Perubahan langsung tersimpan ke GitHub dan tampil di link dalam sekitar 1 menit. <b id="saveMsg" class="mono"></b></span>
-    <button class="btn small" id="logout" type="button">Keluar mode edit</button>
-  </div>
 
   <section id="summary" class="summary" aria-label="Ringkasan"></section>
 
@@ -272,13 +268,12 @@ function putData(retry){
 function persist(){
   render();
   setMsg("Menyimpan…");
-  chain=chain.then(putData).then(function(){setMsg("Tersimpan ✓")},function(e){setMsg("Gagal menyimpan: "+e.message)});
+  chain=chain.then(putData).then(function(){setMsg("")},function(e){setMsg("Gagal menyimpan: "+e.message)});
 }
 function render(){
   fill($("yearSel"),yearsAvail().map(function(y){return[y,y]}),state.year);
   var inYear=progs.filter(function(p){return p.year===state.year});
   $("adminBtns").hidden=!canEdit;
-  $("saveBar").hidden=!canEdit;
   renderSummary(inYear);renderGroups(inYear);renderMap(inYear);renderList(inYear);
 }
 function count(arr){var c={done:0,run:0,plan:0,late:0};arr.forEach(function(p){c[p.status in c?p.status:"plan"]++});return c}
@@ -467,7 +462,7 @@ function enter(token,branch){
   if(m){gh.owner=m[1];if(seg)gh.repo=seg}
   return api(gh.path).then(function(r){
     gh.sha=r.sha;canEdit=true;lsSet(TKEY,token);lsSet(BKEY,gh.branch);
-    load(JSON.parse(unb64(r.content)));setMsg("Tersambung ✓");
+    load(JSON.parse(unb64(r.content)));
   });
 }
 $("lgCancel").onclick=function(){$("loginModal").hidden=true;location.hash="";editMode=false};
