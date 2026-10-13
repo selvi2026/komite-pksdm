@@ -155,6 +155,11 @@
           "name": "Buka tautan (sid-branch-troubleshooting-diagnosis.vercel.app)",
           "url": "https://sid-branch-troubleshooting-diagnosis.vercel.app/",
           "type": "link"
+        },
+        {
+          "name": "Buka tautan (docs.google.com)",
+          "url": "https://docs.google.com/spreadsheets/d/1wvnmbx0a6fCNj5pdHRNEKCjCB8NjqoPxRIbI2TbRA_o/edit?usp=sharing",
+          "type": "link"
         }
       ]
     }
