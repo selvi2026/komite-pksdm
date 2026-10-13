@@ -182,6 +182,26 @@
           "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
         }
       ]
+    },
+    {
+      "id": "pmv657lc7kkp",
+      "name": "Modul Pelatihan Pk Adit",
+      "groupId": "g-pelatihan",
+      "month": 10,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Pelatihan",
+      "stats": [],
+      "pic": "Pk Ganang & Selvi",
+      "summary": "Sales Cabang (CRO)",
+      "result": "Modul",
+      "files": [
+        {
+          "name": "10.7.2026 - Value Based Selling - SALES SID x UISI.pptx",
+          "url": "bukti/10.7.2026---Value-Based-Selling---SALES-SID-x-UISI.pptx",
+          "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
     }
   ]
 }
