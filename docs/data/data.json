@@ -136,6 +136,46 @@
           "type": "image/png"
         }
       ]
+    },
+    {
+      "id": "pmv65weu7081",
+      "name": "L&S - KOMUNITAS SID LC - 8/10/2026",
+      "groupId": "gmv65a3ehl4l",
+      "month": 10,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Tindak lanjut",
+      "stats": [],
+      "pic": "",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "bukti-20261013-110824-4.png",
+          "url": "bukti/bukti-20261013-110824-4.png",
+          "type": "image/png"
+        },
+        {
+          "name": "bukti-20261013-110831-5.png",
+          "url": "bukti/bukti-20261013-110831-5.png",
+          "type": "image/png"
+        },
+        {
+          "name": "bukti-20261013-110856-6.png",
+          "url": "bukti/bukti-20261013-110856-6.png",
+          "type": "image/png"
+        },
+        {
+          "name": "bukti-20261013-110907-7.png",
+          "url": "bukti/bukti-20261013-110907-7.png",
+          "type": "image/png"
+        },
+        {
+          "name": "bukti-20261013-110917-8.png",
+          "url": "bukti/bukti-20261013-110917-8.png",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
