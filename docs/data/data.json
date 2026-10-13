@@ -162,6 +162,26 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "id": "pmv655todutu",
+      "name": "Modul Pelatihan Pk Imron",
+      "groupId": "g-pelatihan",
+      "month": 10,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Pelatihan",
+      "stats": [],
+      "pic": "Pk Ganang & Selvi",
+      "summary": "",
+      "result": "Modul Pelatihan",
+      "files": [
+        {
+          "name": "MODUL 3 sesi - SPARK SIG MARKETING TO INTRODACTION.pptx",
+          "url": "bukti/MODUL-3-sesi---SPARK-SIG-MARKETING-TO-INTRODACTION.pptx",
+          "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
     }
   ]
 }
