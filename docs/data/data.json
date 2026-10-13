@@ -121,11 +121,11 @@
     {
       "id": "pmv64nuye9x3",
       "name": "Penyusunan Dokumen Handbook Activity",
-      "groupId": "g-pelatihan",
+      "groupId": "g-handbook",
       "month": 3,
       "year": 2026,
       "status": "done",
-      "jenis": "Evaluasi",
+      "jenis": "Tindak lanjut",
       "stats": [],
       "pic": "Pk Jafar & Selvi",
       "summary": "Penyusunan Dokumen",
