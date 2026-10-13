@@ -72,33 +72,6 @@
       "files": []
     },
     {
-      "id": "p-spark",
-      "name": "Pelatihan SPARK 1 - MARKETING TO INTRODUCTION",
-      "groupId": "g-pelatihan",
-      "month": 6,
-      "year": 2026,
-      "status": "done",
-      "jenis": "Pelatihan",
-      "pic": "Pk Ganang & Pk Rohim",
-      "summary": "Pelatihan marketing dengan materi definisi marketing menurut Kotler, consumer insight, komoditisasi dan de-komoditisasi, Tiga Game Marketing, serta Brand DNA. Peserta mengikuti pre test dan post test pada 24–25 Juni 2026.",
-      "result": "Rata-rata nilai naik dari 68,9 (pre test) menjadi 91,8 (post test).",
-      "stats": [
-        {
-          "label": "Rata-rata pre test",
-          "value": "68,9"
-        },
-        {
-          "label": "Rata-rata post test",
-          "value": "91,8"
-        },
-        {
-          "label": "Peserta pre / post test",
-          "value": "17 / 13"
-        }
-      ],
-      "files": []
-    },
-    {
       "id": "p-handbook",
       "name": "Handbook Activity SID",
       "groupId": "g-handbook",
