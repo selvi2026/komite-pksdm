@@ -207,6 +207,20 @@
           "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
         }
       ]
+    },
+    {
+      "id": "pmv65iz4ws48",
+      "name": "L&S - KOMUNITAS SID LC - 7/10/2026",
+      "groupId": "g-pelatihan",
+      "month": 10,
+      "year": 2026,
+      "status": "plan",
+      "jenis": "Pelatihan",
+      "stats": [],
+      "pic": "PK JAFAR & SELVI",
+      "summary": "Keputusan yang baik tidak selalu membutuhkan informasi yang lengkap. Yang dibutuhkan adalah informasi yang cukup untuk menentukan langkah yang tepat.",
+      "result": "",
+      "files": []
     }
   ]
 }
