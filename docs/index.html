@@ -376,11 +376,16 @@ function openProg(id){
   renderEditFiles();$("progModal").hidden=false;$("pfName").focus();
 }
 function renderEditFiles(){
-  $("pfFiles").innerHTML=editFiles.map(function(f,i){return '<div class="file"><span class="n">'+esc(f.url)+'</span><button class="btn small danger" type="button" data-rm="'+i+'">Lepas</button></div>'}).join("")||'<span style="color:var(--muted);font-size:.88rem">Belum ada dokumen.</span>';
+  $("pfFiles").innerHTML=editFiles.map(function(f,i){return '<div class="file">'+(f._p?'<img src="'+esc(f._p)+'" alt="">':'')+'<span class="n">'+esc(f.name)+'</span><button class="btn small danger" type="button" data-rm="'+i+'">Lepas</button></div>'}).join("")||'<span style="color:var(--muted);font-size:.88rem">Belum ada dokumen.</span>';
 }
 $("pfFiles").onclick=function(e){var b=e.target.closest("[data-rm]");if(!b)return;editFiles.splice(+b.dataset.rm,1);renderEditFiles()};
 function readB64(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1])};r.onerror=rej;r.readAsDataURL(f)})}
+var uploading=false;
 async function uploadList(list){
+  uploading=true;$("pfSave").disabled=true;$("pfSave").textContent="Mengunggah…";
+  try{await uploadInner(list)}finally{uploading=false;$("pfSave").disabled=false;$("pfSave").textContent="Simpan"}
+}
+async function uploadInner(list){
   for(var i=0;i<list.length;i++){
     var f=list[i],safe=f.name.replace(/[^A-Za-z0-9._-]+/g,"-");
     if(f.size>20*1024*1024){$("pfUpMsg").textContent=f.name+" lebih dari 20 MB, tidak diunggah.";continue}
@@ -389,10 +394,10 @@ async function uploadList(list){
       var path="docs/bukti/"+safe,sha;
       try{sha=(await api(path)).sha}catch(e){if(e.status!==404)throw e}
       await api(path,{method:"PUT",body:{message:"Unggah bukti: "+safe,content:await readB64(f),branch:gh.branch,sha:sha}});
-      editFiles.push({name:f.name,url:"bukti/"+safe,type:f.type||""});renderEditFiles();
+      editFiles.push({name:f.name,url:"bukti/"+safe,type:f.type||"",_p:URL.createObjectURL(f)});renderEditFiles();
     }catch(e){$("pfUpMsg").textContent="Gagal mengunggah "+f.name+": "+e.message;return}
   }
-  $("pfUpMsg").textContent="Selesai diunggah. Klik Simpan untuk menautkan ke program.";
+  $("pfUpMsg").textContent="Terunggah. Klik Simpan supaya gambar tampil di program ini.";
 }
 $("pfUpload").onchange=function(){var l=Array.prototype.slice.call(this.files);this.value="";uploadList(l)};
 function stamp(){var d=new Date(),z=function(n){return String(n).padStart(2,"0")};return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+"-"+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds())}
@@ -416,9 +421,9 @@ $("pfLinkAdd").onclick=function(){
 };
 $("pfCancel").onclick=function(){$("progModal").hidden=true};
 $("progForm").onsubmit=function(e){
-  e.preventDefault();
+  e.preventDefault();if(uploading)return;
   var data={name:$("pfName").value.trim(),groupId:$("pfGroup").value,month:+$("pfMonth").value,year:+$("pfYear").value,status:$("pfStatus").value,
-    jenis:$("pfJenis").value,stats:$("pfStats").value.split("\n").map(function(l){var i=l.indexOf(":");return i>0?{label:l.slice(0,i).trim(),value:l.slice(i+1).trim()}:null}).filter(function(x){return x&&x.label&&x.value}),pic:$("pfPic").value.trim(),summary:$("pfSummary").value.trim(),result:$("pfResult").value.trim(),files:editFiles};
+    jenis:$("pfJenis").value,stats:$("pfStats").value.split("\n").map(function(l){var i=l.indexOf(":");return i>0?{label:l.slice(0,i).trim(),value:l.slice(i+1).trim()}:null}).filter(function(x){return x&&x.label&&x.value}),pic:$("pfPic").value.trim(),summary:$("pfSummary").value.trim(),result:$("pfResult").value.trim(),files:editFiles.map(function(f){return{name:f.name,url:f.url,type:f.type}})};
   if(editing){var i=progs.findIndex(function(x){return x.id===editing});progs[i]=Object.assign({},progs[i],data)}
   else progs.push(Object.assign({id:uid("p")},data));
   state.year=data.year;$("progModal").hidden=true;persist();
