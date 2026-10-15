@@ -257,13 +257,21 @@ function api(path,opt){
 }
 function b64(str){var b=new TextEncoder().encode(str),bin="";for(var i=0;i<b.length;i++)bin+=String.fromCharCode(b[i]);return btoa(bin)}
 function unb64(x){var bin=atob(x.replace(/\n/g,"")),b=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return new TextDecoder().decode(b)}
-function putData(retry){
-  return api(gh.path,{method:"PUT",body:{message:"Update portofolio PKSDM",content:b64(JSON.stringify({groups:groups,programs:progs},null,2)),sha:gh.sha,branch:gh.branch}})
-    .then(function(r){gh.sha=r.content.sha})
-    .catch(function(e){
-      if(e.status===409&&!retry)return api(gh.path).then(function(r){gh.sha=r.sha;return putData(true)});
-      throw e;
-    });
+var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+function retryable(e){return !e.status||e.status===409||e.status===422||e.status===429||e.status>=500||(e.status===403&&/rate|abuse|secondary/i.test(e.message||""))}
+async function withRetry(fn){
+  var last;
+  for(var n=0;n<5;n++){
+    try{return await fn(n)}catch(e){last=e;if(!retryable(e)||n===4)break;await sleep(1200*Math.pow(2,n))}
+  }
+  throw last;
+}
+function putData(){
+  return withRetry(async function(n){
+    if(n>0){var cur=await api(gh.path);gh.sha=cur.sha}
+    var r=await api(gh.path,{method:"PUT",body:{message:"Update portofolio PKSDM",content:b64(JSON.stringify({groups:groups,programs:progs},null,2)),sha:gh.sha,branch:gh.branch}});
+    gh.sha=r.content.sha;
+  });
 }
 function persist(){
   render();
@@ -375,24 +383,53 @@ function renderEditFiles(){
 }
 $("pfFiles").onclick=function(e){var b=e.target.closest("[data-rm]");if(!b)return;editFiles.splice(+b.dataset.rm,1);renderEditFiles()};
 function readB64(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1])};r.onerror=rej;r.readAsDataURL(f)})}
-var uploading=false;
+var uploading=false,upBusy=0;
 async function uploadList(list){
-  uploading=true;$("pfSave").disabled=true;$("pfSave").textContent="Mengunggah…";
-  try{await uploadInner(list)}finally{uploading=false;$("pfSave").disabled=false;$("pfSave").textContent="Simpan"}
+  upBusy++;uploading=true;$("pfSave").disabled=true;$("pfSave").textContent="Mengunggah…";
+  try{await uploadInner(list)}finally{upBusy--;if(!upBusy){uploading=false;$("pfSave").disabled=false;$("pfSave").textContent="Simpan"}}
+}
+function shrink(f){
+  if(!/^image\/(png|jpe?g|webp)$/.test(f.type)||f.size<600*1024)return Promise.resolve(f);
+  return new Promise(function(res){
+    var img=new Image(),u=URL.createObjectURL(f);
+    img.onload=function(){
+      try{
+        var m=1800,k=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement("canvas");
+        c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+        var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
+        c.toBlob(function(b){URL.revokeObjectURL(u);
+          if(!b||b.size>=f.size){res(f);return}
+          res(new File([b],f.name.replace(/\.[^.]+$/,"")+".jpg",{type:"image/jpeg"}));
+        },"image/jpeg",0.88);
+      }catch(e){res(f)}
+    };
+    img.onerror=function(){URL.revokeObjectURL(u);res(f)};
+    img.src=u;
+  });
+}
+function putFile(path,f,b64data){
+  return withRetry(async function(){
+    var sha;
+    try{sha=(await api(path)).sha}catch(e){if(e.status!==404)throw e}
+    return api(path,{method:"PUT",body:{message:"Unggah bukti: "+path.split("/").pop(),content:b64data,branch:gh.branch,sha:sha}});
+  });
 }
 async function uploadInner(list){
+  var ok=0,fail=[];
   for(var i=0;i<list.length;i++){
-    var f=list[i],safe=f.name.replace(/[^A-Za-z0-9._-]+/g,"-");
-    if(f.size>20*1024*1024){$("pfUpMsg").textContent=f.name+" lebih dari 20 MB, tidak diunggah.";continue}
-    $("pfUpMsg").textContent="Mengunggah "+(i+1)+"/"+list.length+": "+f.name+"…";
+    var f=list[i];
+    $("pfUpMsg").textContent="Menyiapkan "+(i+1)+"/"+list.length+": "+f.name+"…";
     try{
-      var path="docs/bukti/"+safe,sha;
-      try{sha=(await api(path)).sha}catch(e){if(e.status!==404)throw e}
-      await api(path,{method:"PUT",body:{message:"Unggah bukti: "+safe,content:await readB64(f),branch:gh.branch,sha:sha}});
-      editFiles.push({name:f.name,url:"bukti/"+safe,type:f.type||"",_p:URL.createObjectURL(f)});renderEditFiles();
-    }catch(e){$("pfUpMsg").textContent="Gagal mengunggah "+f.name+": "+e.message;return}
+      f=await shrink(f);
+      var safe=f.name.replace(/[^A-Za-z0-9._-]+/g,"-");
+      if(f.size>20*1024*1024)throw new Error("ukuran lebih dari 20 MB");
+      var data=await readB64(f);
+      $("pfUpMsg").textContent="Mengunggah "+(i+1)+"/"+list.length+": "+f.name+"…";
+      await new Promise(function(resolve,reject){chain=chain.then(function(){return putFile("docs/bukti/"+safe,f,data)}).then(resolve,reject)});
+      editFiles.push({name:f.name,url:"bukti/"+safe,type:f.type||"",_p:URL.createObjectURL(f)});renderEditFiles();ok++;
+    }catch(e){fail.push(list[i].name+" ("+(e.status?e.status+": ":"")+(e.message||"gagal")+")")}
   }
-  $("pfUpMsg").textContent="Terunggah. Klik Simpan supaya gambar tampil di program ini.";
+  $("pfUpMsg").textContent=(ok?"Terunggah "+ok+" file. Klik Simpan supaya tampil di program ini. ":"")+(fail.length?"Gagal: "+fail.join("; ")+". Coba tempel ulang.":"");
 }
 $("pfUpload").onchange=function(){var l=Array.prototype.slice.call(this.files);this.value="";uploadList(l)};
 function stamp(){var d=new Date(),z=function(n){return String(n).padStart(2,"0")};return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+"-"+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds())}
