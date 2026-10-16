@@ -326,6 +326,31 @@
           "type": "image/jpeg"
         }
       ]
+    },
+    {
+      "id": "pmvam1kavc5p",
+      "name": "L&S - KOMUNITAS SID LC - 16/10/2026",
+      "groupId": "gmv65a3ehl4l",
+      "month": 10,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Tindak lanjut",
+      "stats": [],
+      "pic": "PK JAFAR & SELVI",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "bukti-20261016-135206-1.jpg",
+          "url": "bukti/bukti-20261016-135206-1.jpg",
+          "type": "image/jpeg"
+        },
+        {
+          "name": "bukti-20261016-135221-2.jpg",
+          "url": "bukti/bukti-20261016-135221-2.jpg",
+          "type": "image/jpeg"
+        }
+      ]
     }
   ]
 }
