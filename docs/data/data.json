@@ -35,7 +35,7 @@
       "year": 2026,
       "status": "run",
       "jenis": "Evaluasi",
-      "pic": "Pk Jafar",
+      "pic": "PK JAFAR & SELVI",
       "summary": "Handbook activity SID yang dapat dibuka lewat situs Handbook. Saat ini program berada pada tahap evaluasi: seluruh pegawai cabang meninjau isi handbook.",
       "result": "",
       "stats": [],
@@ -49,6 +49,11 @@
           "name": "Buka tautan (docs.google.com)",
           "url": "https://docs.google.com/spreadsheets/d/1pBKujguhEFzqClf-KRTLhl9i07FVHcFpu6iLTuzh_sA/edit?usp=sharing",
           "type": "link"
+        },
+        {
+          "name": "2026_10_ Kesimpulan_hasil_Evaluasi & Umpan Balik Handbook Operasional SID (Oktober 2026).pdf",
+          "url": "bukti/2026_10_-Kesimpulan_hasil_Evaluasi-Umpan-Balik-Handbook-Operasional-SID-Oktober-2026-.pdf",
+          "type": "application/pdf"
         }
       ]
     },
