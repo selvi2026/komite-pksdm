@@ -366,6 +366,26 @@
           "type": "image/jpeg"
         }
       ]
+    },
+    {
+      "id": "pmveqnm1rlu0",
+      "name": "Perbaikan Handbook Oprasional Cabang",
+      "groupId": "g-handbook",
+      "month": 10,
+      "year": 2026,
+      "status": "run",
+      "jenis": "Pelatihan",
+      "stats": [],
+      "pic": "PK JAFAR & SELVI",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "Buka tautan (sites.google.com)",
+          "url": "https://sites.google.com/view/sid-handbook/home",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
