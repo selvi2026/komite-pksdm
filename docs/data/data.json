@@ -386,6 +386,26 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "id": "pmvga9kyainb",
+      "name": "WEBSITE PENGAJUAN-MONITORING PEMAGANGAN SID",
+      "groupId": "gmv6ewu87kk8",
+      "month": 10,
+      "year": 2026,
+      "status": "plan",
+      "jenis": "Tindak lanjut",
+      "stats": [],
+      "pic": "PK GANANG & SELVI",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "Buka tautan (internshipmuda-sidistributor.vercel.app)",
+          "url": "https://internshipmuda-sidistributor.vercel.app",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
