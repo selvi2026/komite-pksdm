@@ -108,6 +108,24 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
 .pill.jenis{background:var(--brand-soft);color:var(--brand)}
 .dropzone{border:1.5px dashed var(--line);border-radius:6px;padding:14px;text-align:center;font-size:.88rem;color:var(--muted);margin-top:8px}
 .dropzone:focus,.dropzone.over{border-color:var(--brand);color:var(--ink);background:var(--brand-soft)}
+.search{display:flex;flex-direction:column;gap:10px}
+.sbox{display:flex;gap:8px;align-items:center}
+.sbox input{flex:1;min-width:0;font-size:1rem;padding:10px 14px;border-radius:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chips .lbl{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:3px 12px;font-size:.82rem}
+.chip[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:var(--bg)}
+.rsum{font-size:.88rem;color:var(--muted);margin:0 0 10px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:22px}
+.dcard{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0}
+.dcard .thumb{width:64px;height:64px;border-radius:6px;flex:none;object-fit:cover;background:var(--brand-soft)}
+.dcard .ext{width:64px;height:64px;border-radius:6px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-family:var(--f-mono);font-size:.8rem;flex:none}
+.dcard .tx{min-width:0;display:flex;flex-direction:column;gap:3px}
+.dcard a.nm{font-weight:600;color:var(--ink);overflow-wrap:anywhere;text-decoration:none}
+.dcard a.nm:hover{text-decoration:underline}
+.dcard .ctx{font-size:.8rem;color:var(--muted)}
+.dcard .act{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+mark{background:var(--run-soft);color:inherit;border-radius:2px;padding:0 1px}
 .empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:8px}
 .admin{display:flex;gap:8px;margin-top:6px}
 .overlay{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:start center;overflow:auto;padding:24px 16px;z-index:10}
@@ -145,14 +163,36 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
     </div>
   </header>
 
-  <section id="summary" class="summary" aria-label="Ringkasan"></section>
+  <section class="search" aria-label="Pencarian">
+    <div class="sbox">
+      <input type="search" id="q" placeholder="Cari program, dokumen, atau bukti…  (tekan / untuk mencari)" autocomplete="off">
+      <button class="btn" id="qClear" type="button" hidden>Hapus</button>
+    </div>
+    <div class="chips" id="chipScope"><span class="lbl">Cari di</span>
+      <button class="chip" type="button" data-v="all" aria-pressed="true">Semua</button>
+      <button class="chip" type="button" data-v="file" aria-pressed="false">Dokumen &amp; bukti</button>
+      <button class="chip" type="button" data-v="prog" aria-pressed="false">Program</button>
+    </div>
+    <div class="chips" id="chipType"><span class="lbl">Jenis berkas</span>
+      <button class="chip" type="button" data-v="all" aria-pressed="true">Semua</button>
+      <button class="chip" type="button" data-v="img" aria-pressed="false">Gambar</button>
+      <button class="chip" type="button" data-v="pdf" aria-pressed="false">PDF</button>
+      <button class="chip" type="button" data-v="xls" aria-pressed="false">Excel</button>
+      <button class="chip" type="button" data-v="doc" aria-pressed="false">Word / PPT</button>
+      <button class="chip" type="button" data-v="link" aria-pressed="false">Tautan</button>
+    </div>
+  </section>
 
-  <section>
+  <section id="searchRes" aria-live="polite" hidden></section>
+
+  <section id="summary" class="summary dash" aria-label="Ringkasan"></section>
+
+  <section class="dash">
     <div class="sec-head"><h2>Kelompok program</h2><span class="eyebrow" id="gHint">Klik kelompok untuk memfilter</span></div>
     <div id="groups" class="groups"></div>
   </section>
 
-  <section>
+  <section class="dash">
     <div class="sec-head"><h2>Peta bulanan</h2><span class="eyebrow">Klik bulan untuk memfilter</span></div>
     <div class="scroll"><table class="map" id="map"></table></div>
     <div class="legend">
@@ -163,7 +203,7 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
     </div>
   </section>
 
-  <section>
+  <section class="dash">
     <div class="sec-head"><h2 id="listTitle">Daftar program</h2><button class="btn small" id="resetF" type="button" hidden>Hapus filter</button></div>
     <div id="list" class="list"></div>
   </section>
@@ -279,6 +319,10 @@ function persist(){
   chain=chain.then(putData).then(function(){setMsg("")},function(e){setMsg("Gagal menyimpan: "+e.message)});
 }
 function render(){
+  var searching=isSearching();
+  Array.prototype.forEach.call(document.querySelectorAll(".dash"),function(el){el.hidden=searching});
+  $("searchRes").hidden=!searching;$("qClear").hidden=!(searching);
+  if(searching)renderSearch();
   fill($("yearSel"),yearsAvail().map(function(y){return[y,y]}),state.year);
   var inYear=progs.filter(function(p){return p.year===state.year});
   $("adminBtns").hidden=!canEdit;
@@ -348,6 +392,93 @@ function renderList(arr){
       '</div><div><h4>Bukti dan dokumen</h4>'+(files.length?'<div class="files">'+files.map(fileHtml).join("")+'</div>':'<p style="color:var(--muted)">Belum ada dokumen.</p>')+'</div></div></details>';
   }).join("");
 }
+
+/* pencarian */
+var sq={q:"",scope:"all",type:"all"};
+function isSearching(){return sq.q.trim()!==""||sq.scope!=="all"||sq.type!=="all"}
+function fkind(f){
+  if(f.type==="link")return"link";
+  var e=(f.name.split(".").pop()||"").toLowerCase();
+  if(/^(png|jpe?g|gif|webp|bmp|svg)$/.test(e))return"img";
+  if(e==="pdf")return"pdf";
+  if(/^(xlsx?|csv)$/.test(e))return"xls";
+  if(/^(docx?|pptx?)$/.test(e))return"doc";
+  return"other";
+}
+function fold(t){return String(t==null?"":t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function tokens(){return fold(sq.q).split(/\s+/).filter(Boolean)}
+function matchAll(hay,tk){var h=fold(hay);return tk.every(function(t){return h.indexOf(t)>-1})}
+function hl(text,tk){
+  text=String(text==null?"":text);
+  if(!tk.length)return esc(text);
+  var re=new RegExp("("+tk.map(function(t){return t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}).join("|")+")","gi");
+  return text.split(re).map(function(part,i){return i%2?'<mark>'+esc(part)+'</mark>':esc(part)}).join("");
+}
+function gname(id){var g=groups.find(function(x){return x.id===id});return g?g.name:"Tanpa kelompok"}
+function renderSearch(){
+  var tk=tokens(),docs=[],ps=[];
+  progs.forEach(function(p){
+    var ctx=[p.name,gname(p.groupId),p.jenis,MONTHS_FULL[(p.month||1)-1],p.year,ST[p.status]||""].join(" ");
+    (p.files||[]).forEach(function(f){
+      if(sq.type!=="all"&&fkind(f)!==sq.type)return;
+      var hay=f.name+" "+decodeURIComponent(f.url||"")+" "+ctx;
+      if(!tk.length||matchAll(hay,tk))docs.push({p:p,f:f});
+    });
+    if(sq.type==="all"&&sq.scope!=="file"){
+      var ph=[p.name,gname(p.groupId),p.jenis,p.pic,p.summary,p.result,MONTHS_FULL[(p.month||1)-1],p.year,ST[p.status]||"",
+        (p.stats||[]).map(function(x){return x.label+" "+x.value}).join(" "),(p.files||[]).map(function(f){return f.name}).join(" ")].join(" ");
+      if(tk.length&&matchAll(ph,tk))ps.push(p);
+    }
+  });
+  var order=function(a,b){return(b.year-a.year)||(b.month-a.month)};
+  docs.sort(function(a,b){return order(a.p,b.p)});ps.sort(order);
+  if(sq.scope==="prog")docs=[];
+  var h='<p class="rsum">'+docs.length+' dokumen'+(ps.length||sq.scope!=="file"&&sq.type==="all"?' · '+ps.length+' program':'')+(tk.length?' untuk “'+esc(sq.q.trim())+'”':' (semua)')+'</p>';
+  if(docs.length){
+    h+='<h2 style="margin-bottom:10px">Dokumen &amp; bukti</h2><div class="rgrid">'+docs.map(function(d){
+      var k=fkind(d.f),isImg=k==="img",ext=k==="link"?"LINK":(d.f.name.split(".").pop()||"file").slice(0,4).toUpperCase();
+      var st=d.p.status in ST?d.p.status:"plan";
+      return '<div class="dcard">'+(isImg?'<img class="thumb" src="'+esc(d.f.url)+'" alt="" loading="lazy">':'<span class="ext">'+esc(ext)+'</span>')+
+        '<div class="tx"><a class="nm" href="'+esc(d.f.url)+'" target="_blank" rel="noopener">'+hl(d.f.name,tk)+'</a>'+
+        '<span class="ctx">'+hl(d.p.name,tk)+'</span>'+
+        '<span class="ctx">'+esc(gname(d.p.groupId))+' · '+MONTHS_FULL[(d.p.month||1)-1]+' '+d.p.year+'</span>'+
+        '<span class="act"><span class="pill '+st+'">'+ST[st]+'</span><button class="btn small" type="button" data-go="'+esc(d.p.id)+'">Lihat program</button></span></div></div>';
+    }).join("")+'</div>';
+  }
+  if(ps.length){
+    h+='<h2 style="margin-bottom:10px">Program</h2><div class="rgrid">'+ps.map(function(p){
+      var st=p.status in ST?p.status:"plan";
+      var sn=(p.summary||p.result||"");
+      var at=sn.length>140?sn.slice(0,140)+"…":sn;
+      return '<div class="dcard"><div class="tx"><span style="font-weight:600;overflow-wrap:anywhere">'+hl(p.name,tk)+'</span>'+
+        '<span class="ctx">'+esc(gname(p.groupId))+(p.jenis?' · '+esc(p.jenis):'')+' · '+MONTHS_FULL[(p.month||1)-1]+' '+p.year+'</span>'+
+        (at?'<span class="ctx">'+hl(at,tk)+'</span>':'')+
+        '<span class="act"><span class="pill '+st+'">'+ST[st]+'</span>'+((p.files||[]).length?'<span class="clip">'+p.files.length+' dokumen</span>':'')+
+        '<button class="btn small" type="button" data-go="'+esc(p.id)+'">Buka program</button></span></div></div>';
+    }).join("")+'</div>';
+  }
+  if(!docs.length&&!ps.length)h+='<div class="empty">Tidak ada hasil'+(tk.length?' untuk “'+esc(sq.q.trim())+'”':'')+'. Coba kata kunci lain, misalnya nama pelatihan, bulan, atau nama berkas.</div>';
+  $("searchRes").innerHTML=h;
+}
+function chipSync(){
+  Array.prototype.forEach.call($("chipScope").querySelectorAll(".chip"),function(b){b.setAttribute("aria-pressed",b.dataset.v===sq.scope)});
+  Array.prototype.forEach.call($("chipType").querySelectorAll(".chip"),function(b){b.setAttribute("aria-pressed",b.dataset.v===sq.type)});
+}
+$("q").addEventListener("input",function(){sq.q=this.value;render()});
+$("q").addEventListener("keydown",function(e){if(e.key==="Escape"){sq={q:"",scope:"all",type:"all"};this.value="";chipSync();render()}});
+$("qClear").onclick=function(){sq={q:"",scope:"all",type:"all"};$("q").value="";chipSync();render();$("q").focus()};
+$("chipScope").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;sq.scope=b.dataset.v;chipSync();render()};
+$("chipType").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;sq.type=b.dataset.v;chipSync();render()};
+$("searchRes").onclick=function(e){
+  var b=e.target.closest("[data-go]");if(!b)return;
+  var p=progs.find(function(x){return x.id===b.dataset.go});if(!p)return;
+  sq={q:"",scope:"all",type:"all"};$("q").value="";chipSync();
+  state.year=p.year;state.group=null;state.month=null;state.open=p.id;render();
+  var el=document.querySelector('details.prog[data-id="'+p.id+'"]');if(el){el.open=true;el.scrollIntoView({behavior:"smooth",block:"center"})}
+};
+document.addEventListener("keydown",function(e){
+  if(e.key==="/"&&!/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName||"")){e.preventDefault();$("q").focus()}
+});
 
 $("yearSel").onchange=function(){state.year=+this.value;state.group=null;state.month=null;render()};
 $("groups").onclick=function(e){
