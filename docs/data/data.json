@@ -416,6 +416,31 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "id": "pmvj79a21n22",
+      "name": "MAGANG HUB",
+      "groupId": "gmv6ewu87kk8",
+      "month": 10,
+      "year": 2026,
+      "status": "done",
+      "jenis": "Tindak lanjut",
+      "stats": [],
+      "pic": "All TIM",
+      "summary": "",
+      "result": "",
+      "files": [
+        {
+          "name": "Buka tautan (organizer.maganghub.kemnaker.go.id)",
+          "url": "https://organizer.maganghub.kemnaker.go.id/apps/vacancies",
+          "type": "link"
+        },
+        {
+          "name": "Buka tautan (docs.google.com)",
+          "url": "https://docs.google.com/spreadsheets/d/1q4v4l28bTje0hyVZHYMdo_jCWQgOb-Vuc5UWYnYtQCc/edit?usp=sharing",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
