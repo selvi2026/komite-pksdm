@@ -126,6 +126,57 @@ details.prog[open]>summary{border-bottom:1px solid var(--line)}
 .dcard .ctx{font-size:.8rem;color:var(--muted)}
 .dcard .act{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
 mark{background:var(--run-soft);color:inherit;border-radius:2px;padding:0 1px}
+
+.prow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start}
+.prow>input{margin-top:17px;width:18px;height:18px;accent-color:var(--brand)}
+.selbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.opt{display:flex;gap:10px;align-items:center;font-size:.92rem;font-weight:400!important}
+.opt input{width:auto}
+.rad{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:8px;padding:12px}
+#printRoot{display:none}
+@media print{
+  @page{size:A4;margin:14mm}
+  body>*:not(#printRoot){display:none!important}
+  #printRoot{display:block!important}
+  html,body{background:#fff!important;padding:0!important;color:#14283a}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+#printRoot{font-size:11pt;line-height:1.45;color:#14283a}
+.pr-cover{border-bottom:3px solid #14506b;padding-bottom:12px;margin-bottom:16px}
+.pr-cover .pr-eye{font-family:var(--f-mono);font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;color:#5d6f7d}
+.pr-cover h1{font-size:24pt;margin:2px 0 6px;color:#14283a}
+.pr-cover p{margin:0;color:#5d6f7d;font-size:10pt}
+.pr-sum{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 0 16px}
+.pr-sum div{border:1px solid #d9e0e5;border-radius:6px;padding:8px 10px;break-inside:avoid}
+.pr-sum b{display:block;font-family:var(--f-display);font-size:20pt;line-height:1.1}
+.pr-sum span{font-size:8.5pt;color:#5d6f7d}
+.pr-h2{font-family:var(--f-display);font-size:14pt;margin:18px 0 8px;color:#14506b;break-after:avoid}
+table.pr-t{border-collapse:collapse;width:100%;font-size:9pt;break-inside:avoid}
+.pr-t th,.pr-t td{border:1px solid #d9e0e5;padding:4px 5px;text-align:center}
+.pr-t th{background:#e1eef4;color:#14283a;font-weight:600}
+.pr-t td:first-child,.pr-t th:first-child{text-align:left}
+.pr-month{font-family:var(--f-display);font-size:15pt;margin:20px 0 8px;padding:5px 10px;background:#14506b;color:#fff;border-radius:5px;break-after:avoid}
+.pr-prog{border:1px solid #d9e0e5;border-radius:8px;padding:11px 13px;margin:0 0 10px;break-inside:avoid-page}
+.pr-prog header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.pr-prog h3{font-family:var(--f-display);font-size:12.5pt;margin:0;color:#14283a}
+.pr-meta{font-size:9pt;color:#5d6f7d;margin:3px 0 8px}
+.pr-prog h4{margin:8px 0 2px;font-family:var(--f-mono);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:#5d6f7d;font-weight:500}
+.pr-prog p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.pr-pill{font-family:var(--f-mono);font-size:8pt;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.pr-pill.done{background:#dff1e8;color:#1f7a52}.pr-pill.run{background:#fbeed4;color:#b4730d}
+.pr-pill.plan{background:#e7ecf0;color:#6c7f90}.pr-pill.late{background:#f8e1e1;color:#b23a3a}
+.pr-stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.pr-stats div{border:1px solid #d9e0e5;border-radius:5px;padding:3px 8px}
+.pr-stats b{font-family:var(--f-display);font-size:11pt;margin-right:5px}
+.pr-stats span{font-size:8.5pt;color:#5d6f7d}
+.pr-files{margin:2px 0 0;padding-left:16px;font-size:9.5pt}
+.pr-files li{overflow-wrap:anywhere}
+.pr-files a{color:#14506b}
+.pr-imgs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.pr-imgs figure{margin:0;break-inside:avoid}
+.pr-imgs img{width:100%;max-height:120mm;object-fit:contain;border:1px solid #d9e0e5;border-radius:4px;background:#fff}
+.pr-imgs figcaption{font-size:8pt;color:#5d6f7d;overflow-wrap:anywhere}
+.pr-foot{margin-top:18px;font-size:8.5pt;color:#5d6f7d;border-top:1px solid #d9e0e5;padding-top:6px}
 .empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:8px}
 .admin{display:flex;gap:8px;margin-top:6px}
 .overlay{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:start center;overflow:auto;padding:24px 16px;z-index:10}
@@ -152,6 +203,7 @@ mark{background:var(--run-soft);color:inherit;border-radius:2px;padding:0 1px}
       <h1>Portofolio Komite PKSDM</h1>
     </div>
     <div class="toolbar">
+      <button class="btn" id="dlBtn" type="button">Unduh PDF</button>
       <label class="eyebrow" for="yearSel">Tahun</label>
       <select id="yearSel"></select>
       <span id="adminBtns" class="toolbar" hidden>
@@ -204,10 +256,32 @@ mark{background:var(--run-soft);color:inherit;border-radius:2px;padding:0 1px}
   </section>
 
   <section class="dash">
-    <div class="sec-head"><h2 id="listTitle">Daftar program</h2><button class="btn small" id="resetF" type="button" hidden>Hapus filter</button></div>
+    <div class="sec-head"><h2 id="listTitle">Daftar program</h2><span class="selbar"><button class="btn small" id="resetF" type="button" hidden>Hapus filter</button><button class="btn small" id="selAll" type="button">Centang semua</button><button class="btn small" id="selNone" type="button">Kosongkan centang</button><button class="btn small primary" id="dlSel" type="button">Unduh PDF yang dicentang (0)</button></span></div>
     <div id="list" class="list"></div>
   </section>
 </div>
+
+<div class="overlay" id="pdfModal" hidden>
+  <form class="modal" id="pdfForm">
+    <h2>Unduh PDF</h2>
+    <p style="margin:0;color:var(--muted);font-size:.9rem">PDF berisi semua informasi sesuai tampilan sistem: ringkasan, kelompok, peta bulanan, lalu setiap program per bulan lengkap dengan penjelasan, angka kunci, hasil, dan daftar dokumen bukti.</p>
+    <div class="rad">
+      <label class="opt"><input type="radio" name="pdfScope" value="all" checked> Semua program, dikelompokkan per bulan</label>
+      <label class="opt"><input type="radio" name="pdfScope" value="month"> Satu bulan saja</label>
+      <label class="opt"><input type="radio" name="pdfScope" value="sel"> Hanya program yang dicentang (<span id="pdfSelN">0</span>)</label>
+    </div>
+    <div class="g2">
+      <label>Tahun<select id="pdfYear"></select></label>
+      <label>Bulan (untuk "Satu bulan saja")<select id="pdfMonth"></select></label>
+    </div>
+    <label class="opt"><input type="checkbox" id="pdfSum" checked> Sertakan ringkasan, kelompok, dan peta bulanan</label>
+    <label class="opt"><input type="checkbox" id="pdfImg" checked> Tampilkan gambar bukti di dalam PDF</label>
+    <div class="eyebrow" id="pdfMsg">Setelah klik Buat PDF, jendela cetak terbuka. Pilih tujuan <b>Simpan sebagai PDF</b> (Save as PDF), lalu klik Simpan.</div>
+    <div class="toolbar" style="justify-content:flex-end"><button class="btn" type="button" id="pdfCancel">Batal</button><button class="btn primary" type="submit" id="pdfGo">Buat PDF</button></div>
+  </form>
+</div>
+
+<div id="printRoot" aria-hidden="true"></div>
 
 <div class="overlay" id="loginModal" hidden>
   <form class="modal" id="loginForm">
@@ -370,16 +444,19 @@ function fileHtml(f){
   return '<a class="file" href="'+esc(f.url)+'" target="_blank" rel="noopener">'+
     (isImg?'<img src="'+esc(f.url)+'" alt="" loading="lazy">':'<span class="ext">'+esc(ext)+'</span>')+'<span class="n">'+esc(f.name)+'</span></a>';
 }
+var sel={};
+function selCount(){return Object.keys(sel).filter(function(k){return sel[k]}).length}
 function renderList(arr){
   var f=arr.filter(function(p){return(!state.group||p.groupId===state.group)&&(!state.month||p.month===state.month)});
   f.sort(function(a,b){return a.month-b.month||(a.name||"").localeCompare(b.name||"")});
   var gname=function(id){var g=groups.find(function(x){return x.id===id});return g?g.name:"Tanpa kelompok"};
   $("resetF").hidden=!(state.group||state.month);
   $("listTitle").textContent="Daftar program"+(state.month?" · "+MONTHS_FULL[state.month-1]:"")+(state.group?" · "+gname(state.group):"");
+  $("dlSel").textContent="Unduh PDF yang dicentang ("+selCount()+")";
   if(!f.length){$("list").innerHTML='<div class="empty">'+(progs.length?'Tidak ada program untuk filter ini.':'Belum ada program yang dicatat.')+'</div>';return}
   $("list").innerHTML=f.map(function(p){
     var files=p.files||[],st=p.status in ST?p.status:"plan";
-    return '<details class="prog" data-id="'+esc(p.id)+'"'+(state.open===p.id?" open":"")+'><summary>'+
+    return '<div class="prow"><input type="checkbox" class="selbox" data-id="'+esc(p.id)+'" aria-label="Centang program '+esc(p.name)+'"'+(sel[p.id]?" checked":"")+'><details class="prog" data-id="'+esc(p.id)+'"'+(state.open===p.id?" open":"")+'><summary>'+
       '<span class="mth">'+MONTHS_FULL[(p.month||1)-1]+' '+p.year+'</span>'+
       '<span class="pname">'+esc(p.name)+'<span class="pgroup">'+esc(gname(p.groupId))+(p.jenis?' · '+esc(p.jenis):'')+'</span></span>'+
       '<span class="meta">'+(files.length?'<span class="clip">'+files.length+' dokumen</span>':'')+'<span class="pill '+st+'">'+ST[st]+'</span></span></summary>'+
@@ -389,7 +466,7 @@ function renderList(arr){
         (p.result?'<h4>Hasil / capaian</h4><p>'+esc(p.result)+'</p>':'')+
         (p.pic?'<h4>Penanggung jawab</h4><p>'+esc(p.pic)+'</p>':'')+
         (canEdit?'<div class="admin"><button class="btn small" type="button" data-editp="'+esc(p.id)+'">Ubah program</button></div>':'')+
-      '</div><div><h4>Bukti dan dokumen</h4>'+(files.length?'<div class="files">'+files.map(fileHtml).join("")+'</div>':'<p style="color:var(--muted)">Belum ada dokumen.</p>')+'</div></div></details>';
+      '</div><div><h4>Bukti dan dokumen</h4>'+(files.length?'<div class="files">'+files.map(fileHtml).join("")+'</div>':'<p style="color:var(--muted)">Belum ada dokumen.</p>')+'</div></div></details></div>';
   }).join("");
 }
 
@@ -479,6 +556,109 @@ $("searchRes").onclick=function(e){
 document.addEventListener("keydown",function(e){
   if(e.key==="/"&&!/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName||"")){e.preventDefault();$("q").focus()}
 });
+
+
+/* unduh PDF */
+function absUrl(u){try{return new URL(u,location.href).href}catch(e){return u}}
+function pdfProgs(o){
+  var list=progs.filter(function(p){return(o.year==="all"||p.year===+o.year)});
+  if(o.scope==="month")list=list.filter(function(p){return p.month===+o.month});
+  if(o.scope==="sel")list=progs.filter(function(p){return sel[p.id]});
+  return list.sort(function(a,b){return(a.year-b.year)||(a.month-b.month)||(a.name||"").localeCompare(b.name||"")});
+}
+function buildPrint(o){
+  var list=pdfProgs(o),c=count(list),years=[];
+  list.forEach(function(p){if(years.indexOf(p.year)<0)years.push(p.year)});
+  var scopeTxt=o.scope==="sel"?"Program yang dicentang ("+list.length+")":o.scope==="month"?MONTHS_FULL[+o.month-1]+(o.year==="all"?"":" "+o.year):(o.year==="all"?"Semua program, semua tahun":"Semua program tahun "+o.year);
+  var h='<div class="pr-cover"><div class="pr-eye">Tim Komite PKSDM</div><h1>Portofolio Komite PKSDM</h1><p>'+esc(scopeTxt)+' · Dibuat '+new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})+'</p></div>';
+  if(!list.length)return h+'<p>Tidak ada program untuk pilihan ini.</p>';
+  if(o.sum){
+    h+='<div class="pr-sum"><div><b>'+(list.length?Math.round(c.done/list.length*100):0)+'%</b><span>Realisasi</span></div><div><b>'+list.length+'</b><span>Total program</span></div><div><b style="color:#1f7a52">'+c.done+'</b><span>Terealisasi</span></div><div><b style="color:#b4730d">'+c.run+'</b><span>Berjalan</span></div><div><b>'+(c.plan+c.late)+'</b><span>Direncanakan / tertunda</span></div></div>';
+    h+='<div class="pr-h2">Kelompok program</div><table class="pr-t"><tr><th>Kelompok</th><th>Total</th><th>Terealisasi</th><th>Berjalan</th><th>Direncanakan</th><th>Tertunda</th></tr>'+
+      groups.map(function(g){var m=list.filter(function(p){return p.groupId===g.id}),k=count(m);return m.length?'<tr><td>'+esc(g.name)+'</td><td>'+m.length+'</td><td>'+k.done+'</td><td>'+k.run+'</td><td>'+k.plan+'</td><td>'+k.late+'</td></tr>':''}).join("")+'</table>';
+    years.forEach(function(y){
+      h+='<div class="pr-h2">Peta bulanan '+y+'</div><table class="pr-t"><tr><th>Kelompok</th>'+MONTHS.map(function(m){return'<th>'+m+'</th>'}).join("")+'</tr>'+
+        groups.map(function(g){
+          var any=list.some(function(p){return p.groupId===g.id&&p.year===y});if(!any)return"";
+          return '<tr><td>'+esc(g.name)+'</td>'+MONTHS.map(function(m,i){var n=list.filter(function(p){return p.groupId===g.id&&p.year===y&&p.month===i+1}).length;return'<td>'+(n||"·")+'</td>'}).join("")+'</tr>';
+        }).join("")+'</table>';
+    });
+  }
+  var cur="";
+  list.forEach(function(p){
+    var key=p.year+"-"+p.month;
+    if(key!==cur){cur=key;h+='<div class="pr-month">'+MONTHS_FULL[(p.month||1)-1]+' '+p.year+'</div>'}
+    var st=p.status in ST?p.status:"plan",files=p.files||[];
+    var imgs=o.img?files.filter(function(f){return f.type!=="link"&&(/^image\//.test(f.type||"")||/\.(png|jpe?g|gif|webp)$/i.test(f.name))}):[];
+    h+='<article class="pr-prog"><header><h3>'+esc(p.name)+'</h3><span class="pr-pill '+st+'">'+ST[st]+'</span></header>'+
+      '<div class="pr-meta">'+esc(gname(p.groupId))+(p.jenis?' · '+esc(p.jenis):'')+' · '+MONTHS_FULL[(p.month||1)-1]+' '+p.year+(p.pic?' · PJ: '+esc(p.pic):'')+'</div>'+
+      (p.summary?'<h4>Penjelasan kegiatan</h4><p>'+esc(p.summary)+'</p>':'')+
+      (p.stats&&p.stats.length?'<h4>Angka kunci</h4><div class="pr-stats">'+p.stats.map(function(x){return'<div><b>'+esc(x.value)+'</b><span>'+esc(x.label)+'</span></div>'}).join("")+'</div>':'')+
+      (p.result?'<h4>Hasil / capaian</h4><p>'+esc(p.result)+'</p>':'')+
+      '<h4>Bukti dan dokumen ('+files.length+')</h4>'+
+      (files.length?'<ul class="pr-files">'+files.map(function(f){var u=absUrl(f.url);return'<li>'+esc(f.name)+' — <a href="'+esc(u)+'">'+esc(u)+'</a></li>'}).join("")+'</ul>':'<p>Belum ada dokumen.</p>')+
+      (imgs.length?'<div class="pr-imgs">'+imgs.map(function(f){return'<figure><img src="'+esc(absUrl(f.url))+'" alt=""><figcaption>'+esc(f.name)+'</figcaption></figure>'}).join("")+'</div>':'')+
+      '</article>';
+  });
+  return h+'<div class="pr-foot">Sumber: '+esc(location.origin+location.pathname)+'</div>';
+}
+function waitImages(root){
+  var imgs=Array.prototype.slice.call(root.querySelectorAll("img"));
+  return Promise.all(imgs.map(function(i){
+    return new Promise(function(r){
+      var done=false,fin=function(){if(!done){done=true;r()}};
+      var go=function(){
+        try{
+          var k=Math.min(1,1400/Math.max(i.naturalWidth,i.naturalHeight)),c=document.createElement("canvas");
+          c.width=Math.max(1,Math.round(i.naturalWidth*k));c.height=Math.max(1,Math.round(i.naturalHeight*k));
+          var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);
+          i.onload=fin;i.onerror=fin;i.src=c.toDataURL("image/jpeg",0.82);
+          if(i.complete)fin();
+        }catch(e){fin()}
+      };
+      if(i.complete&&i.naturalWidth)go();else{i.onload=go;i.onerror=fin}
+      setTimeout(fin,20000);
+    });
+  }));
+}
+function openPdf(preset){
+  var ys=yearsAvail();
+  fill($("pdfYear"),[["all","Semua tahun"]].concat(ys.map(function(y){return[y,y]})),state.year);
+  fill($("pdfMonth"),MONTHS_FULL.map(function(m,i){return[i+1,m]}),state.month||new Date().getMonth()+1);
+  $("pdfSelN").textContent=selCount();
+  var v=preset||"all";
+  Array.prototype.forEach.call(document.getElementsByName("pdfScope"),function(r){r.checked=r.value===v});
+  $("pdfMsg").innerHTML='Setelah klik Buat PDF, jendela cetak terbuka. Pilih tujuan <b>Simpan sebagai PDF</b> (Save as PDF), lalu klik Simpan.';
+  $("pdfModal").hidden=false;
+}
+$("dlBtn").onclick=function(){openPdf("all")};
+$("dlSel").onclick=function(){openPdf("sel")};
+$("pdfCancel").onclick=function(){$("pdfModal").hidden=true};
+$("pdfForm").onsubmit=async function(e){
+  e.preventDefault();
+  var scope=(document.querySelector('input[name="pdfScope"]:checked')||{}).value||"all";
+  if(scope==="sel"&&!selCount()){$("pdfMsg").textContent="Belum ada program yang dicentang. Centang program di daftar, atau pilih cakupan lain.";return}
+  var o={scope:scope,year:$("pdfYear").value,month:$("pdfMonth").value,sum:$("pdfSum").checked,img:$("pdfImg").checked};
+  $("pdfGo").disabled=true;$("pdfMsg").textContent="Menyiapkan PDF…";
+  var root=$("printRoot"),theme=document.documentElement.getAttribute("data-theme"),title=document.title;
+  root.innerHTML=buildPrint(o);
+  document.documentElement.setAttribute("data-theme","light");
+  document.title="Portofolio-Komite-PKSDM-"+(scope==="month"?MONTHS_FULL[+o.month-1]+(o.year==="all"?"":"-"+o.year):scope==="sel"?"Terpilih":(o.year==="all"?"Semua":o.year));
+  await waitImages(root);
+  var done=function(){
+    window.removeEventListener("afterprint",done);
+    if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");
+    document.title=title;root.innerHTML="";$("pdfGo").disabled=false;$("pdfModal").hidden=true;
+  };
+  window.addEventListener("afterprint",done);
+  window.print();
+};
+$("list").addEventListener("change",function(e){var b=e.target.closest(".selbox");if(!b)return;if(b.checked)sel[b.dataset.id]=true;else delete sel[b.dataset.id];$("dlSel").textContent="Unduh PDF yang dicentang ("+selCount()+")"});
+function visibleIds(){
+  return progs.filter(function(p){return p.year===state.year&&(!state.group||p.groupId===state.group)&&(!state.month||p.month===state.month)}).map(function(p){return p.id});
+}
+$("selAll").onclick=function(){visibleIds().forEach(function(id){sel[id]=true});render()};
+$("selNone").onclick=function(){sel={};render()};
 
 $("yearSel").onchange=function(){state.year=+this.value;state.group=null;state.month=null;render()};
 $("groups").onclick=function(e){
@@ -613,7 +793,7 @@ armed($("gfDelete"),"Hapus kelompok",function(){
   groups=groups.filter(function(g){return g.id!==editGroup});$("grpModal").hidden=true;persist();
 });
 $("logout").onclick=function(){lsSet(TKEY,null);location.hash="";location.reload()};
-document.addEventListener("keydown",function(e){if(e.key==="Escape"){$("progModal").hidden=true;$("grpModal").hidden=true;$("loginModal").hidden=true}});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){$("progModal").hidden=true;$("grpModal").hidden=true;$("loginModal").hidden=true;$("pdfModal").hidden=true}});
 
 function load(d){
   groups=d.groups||[];progs=d.programs||[];
